@@ -1,6 +1,7 @@
 import { Link, Navigate, Outlet } from 'react-router-dom'
 import { useStateContext } from '../contexts/ContextProvider'
 import axiosClient from '../axiosClient'
+import { useEffect } from 'react'
 
 const DefaultLayout = () => {
 
@@ -21,6 +22,13 @@ const DefaultLayout = () => {
       setToken(null)
     })
   }
+
+  useEffect(()=>{
+    axiosClient.get('/user')
+    .then(({data})=>{
+      setUser(data)
+    })
+  },[])
 
   return (
     <div id="defaultLayout">
