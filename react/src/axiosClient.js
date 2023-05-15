@@ -2,6 +2,10 @@ import axios from "axios";
 
 const axiosClient = axios.create({
     baseURL: `${import.meta.env.VITE_API_BASE_URL}/api`,
+    // headers: {
+    //     'Access-Control-Allow-Origin': '*',
+    //     'Content-type': '*',
+    // },
 });
 
 /*
@@ -23,9 +27,13 @@ axiosClient.interceptors.response.use(
         return response;
     },
     (error) => {
-        const {response} = error;
-        if(response.status === 401){ //user unauthorized
-            localStorage.removeItem('ACCESS_TOKEN')
+        try{
+            const {response} = error;
+            if(response.status === 401){ //user unauthorized
+                localStorage.removeItem('ACCESS_TOKEN')
+            }
+        }catch(e){
+            console.log("err ",e)
         }
 
         throw error;
