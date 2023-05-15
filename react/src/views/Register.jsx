@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import { Link } from "react-router-dom";
-import axiosClient from '../axiosClient';
+import axiosClient from '../axios-client';
 import { useStateContext } from "../contexts/ContextProvider";
 
 const Register = () => {
