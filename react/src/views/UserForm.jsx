@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axiosClient from "../axiosClient";
+import { useStateContext } from "../contexts/ContextProvider";
 
 const UserForm = () => {
     const navigate = useNavigate();
@@ -14,6 +15,8 @@ const UserForm = () => {
         password: "",
         password_confirmation: "",
     });
+
+    const { setNotification } = useStateContext()
 
     if (id) {
         useEffect(() => {
@@ -29,32 +32,36 @@ const UserForm = () => {
         }, []);
     }
 
-    const onSubmit = ev => {
-        ev.preventDefault()
+    const onSubmit = (ev) => {
+        ev.preventDefault();
         if (user.id) {
-          axiosClient.put(`/users/${user.id}`, user)
-            .then(() => {
-              navigate('/users')
-            })
-            .catch(err => {
-              const response = err.response;
-              if (response && response.status === 422) {
-                setErrors(response.data.errors)
-              }
-            })
+            axiosClient
+                .put(`/users/${user.id}`, user)
+                .then(() => {
+                    setNotification("User was updated successfully");
+                    navigate("/users");
+                })
+                .catch((err) => {
+                    const response = err.response;
+                    if (response && response.status === 422) {
+                        setErrors(response.data.errors);
+                    }
+                });
         } else {
-          axiosClient.post('/users', user)
-            .then(() => {
-              navigate('/users')
-            })
-            .catch(err => {
-              const response = err.response;
-              if (response && response.status === 422) {
-                setErrors(response.data.errors)
-              }
-            })
+            axiosClient
+                .post("/users", user)
+                .then(() => {
+                    setNotification("User was created successfully")
+                    navigate("/users");
+                })
+                .catch((err) => {
+                    const response = err.response;
+                    if (response && response.status === 422) {
+                        setErrors(response.data.errors);
+                    }
+                });
         }
-      }
+    };
 
     return (
         <>
