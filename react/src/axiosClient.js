@@ -29,7 +29,7 @@ axiosClient.interceptors.response.use(
     (error) => {
         try{
             const {response} = error;
-            if(response.status === 401){ //user unauthorized
+            if(response && response.status === 401){ //user unauthorized
                 localStorage.removeItem('ACCESS_TOKEN')
             }
         }catch(e){
